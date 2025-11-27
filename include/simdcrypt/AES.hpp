@@ -63,17 +63,11 @@ namespace simdcrypt {
 
   const block ZeroBlock = _mm_setzero_si128();
 
-  inline block toBlock(const uint8_t* bytes) {
-      return _mm_loadu_si128(reinterpret_cast<const __m128i*>(bytes));
-  }
+  block toBlock(const uint8_t* bytes);
 
-  inline block toBlock(uint64_t high, uint64_t low) {
-      return _mm_set_epi64x(high, low);
-  }
+  block toBlock(uint64_t high, uint64_t low);
 
-  inline block toBlock(uint64_t low) {
-      return _mm_set_epi64x(0, low);
-  }
+  block toBlock(uint64_t low);
 
   template <int i>
   uint64_t extract_u64(const block &b) {
@@ -91,38 +85,23 @@ namespace simdcrypt {
       return static_cast<uint8_t>(_mm_extract_epi8(b, i));
   }
 
-  inline block load_block(const block* ptr) {
-      return _mm_loadu_si128(ptr);
-  }
+  block load_block(const block* ptr);
 
-  inline block xor_blocks(const block &a, const block &b) {
-      return _mm_xor_si128(a, b);
-  }
+  block xor_blocks(const block &a, const block &b);
 
-  inline void store_block(const block &b, uint8_t* dest) {
-      _mm_storeu_si128(reinterpret_cast<__m128i*>(dest), b);
-  }
-
+  void store_block(const block &b, uint8_t* dest);
 #else
   typedef uint8x16_t block;
 
   const block ZeroBlock = vdupq_n_u8(0);
 
-  inline block toBlock(const uint8_t* bytes) {
-      return vld1q_u8(bytes);
-  }
+  block toBlock(const uint8_t* bytes);
 
-  inline block toBlock(uint64_t high, uint64_t low) {
-      return vcombine_u8(vcreate_u8(low), vcreate_u8(high));
-  }
+  block toBlock(uint64_t high, uint64_t low);
 
-  inline block toBlock(uint64_t low) {
-      return vcombine_u8(vcreate_u8(low), vdup_n_u8(0));
-  }
+  block toBlock(uint64_t low);
 
-  inline block load_block(const block* ptr) {
-      return vld1q_u8(reinterpret_cast<const uint8_t*>(ptr));
-  }
+  block load_block(const block* ptr);
 
   template <int i>
   uint64_t extract_u64(const block &b) {
@@ -140,14 +119,9 @@ namespace simdcrypt {
       return vgetq_lane_u8(b, i);
   }
 
-  inline block xor_blocks(const block &a, const block &b) {
-      return veorq_u8(a, b);
-  }
+  block xor_blocks(const block &a, const block &b);
 
-  inline void store_block(const block &b, uint8_t* dest) {
-      vst1q_u8(dest, b);
-  }
-
+  void store_block(const block &b, uint8_t* dest);
 #endif
 
   class AES {
