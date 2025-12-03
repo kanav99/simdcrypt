@@ -7,12 +7,10 @@ set(CMAKE_CXX_STANDARD 20)
 if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "AMD64")
     # if Intel machine, use `-maes` flag
     message(STATUS "${PROJECT_NAME}: Using Intel AES-NI")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes")
     set(SIMDCRYPT_CXX_FLAGS "-maes")
 elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
     # if ARM machine, use `-march=armv8-a+crypto` flag
     message(STATUS "${PROJECT_NAME}: Using ARM Neon")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=armv8-a+crypto")
     set(SIMDCRYPT_CXX_FLAGS "-march=armv8-a+crypto")
 endif()
 
@@ -20,6 +18,8 @@ add_library(${PROJECT_NAME} STATIC
     src/AES.cpp
     src/PRNG.cpp
 )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "${SIMDCRYPT_CXX_FLAGS}")
 
 target_include_directories(${PROJECT_NAME}
 PUBLIC
