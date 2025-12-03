@@ -8,10 +8,12 @@ if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" OR "${CMAKE_SYSTEM_PROCESSOR}"
     # if Intel machine, use `-maes` flag
     message(STATUS "${PROJECT_NAME}: Using Intel AES-NI")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -maes")
+    set(SIMDCRYPT_CXX_FLAGS "-maes")
 elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
     # if ARM machine, use `-march=armv8-a+crypto` flag
     message(STATUS "${PROJECT_NAME}: Using ARM Neon")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=armv8-a+crypto")
+    set(SIMDCRYPT_CXX_FLAGS "-march=armv8-a+crypto")
 endif()
 
 add_library(${PROJECT_NAME} STATIC
