@@ -19,7 +19,8 @@ add_library(${PROJECT_NAME} STATIC
     src/PRNG.cpp
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "${SIMDCRYPT_CXX_FLAGS}")
+# set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "${SIMDCRYPT_CXX_FLAGS}")
+target_compile_options(${PROJECT_NAME} PUBLIC ${SIMDCRYPT_CXX_FLAGS})
 
 target_include_directories(${PROJECT_NAME}
 PUBLIC
